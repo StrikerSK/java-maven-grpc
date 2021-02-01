@@ -1,13 +1,12 @@
-package com.custom.server;
+package com.custom.server.user;
 
-import com.custom.protobuf.User;
+import com.custom.generated.protobuf.User;
+import com.custom.generated.protobuf.userGrpc;
 import io.grpc.stub.StreamObserver;
 
 import java.util.Arrays;
 
-import static com.custom.protobuf.userGrpc.userImplBase;
-
-public class UserService extends userImplBase {
+public class UserService extends userGrpc.userImplBase {
 
 	@Override
 	public void login(User.LoginRequest request, StreamObserver<User.APIResponse> responseObserver) {

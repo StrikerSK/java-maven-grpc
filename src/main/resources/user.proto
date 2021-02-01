@@ -1,5 +1,5 @@
 syntax = "proto3";
-option java_package = "com.custom.protobuf";
+option java_package = "com.custom.generated.protobuf";
 
 service user {
   rpc login(LoginRequest) returns (APIResponse);

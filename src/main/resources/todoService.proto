@@ -1,0 +1,26 @@
+syntax = "proto3";
+option java_package = "com.custom.generated.todoist";
+
+service TodoService {
+  rpc add(Todo) returns (APIResponse);
+  rpc list(Empty) returns (TodoList);
+}
+
+message Todo{
+  string Name = 1;
+  string Task = 2;
+  string CreateAt = 3;
+}
+
+message TodoList {
+  repeated Todo todos = 1;
+}
+
+message APIResponse {
+  string responseMessage = 1;
+  int32 responseCode = 2;
+}
+
+message Empty {
+}
+

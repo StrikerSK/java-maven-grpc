@@ -25,7 +25,7 @@
 hs_err_pid*
 
 # protobuf generated stuff
-src/main/java/com/custom/protobuf
+src/main/java/com/custom/generated
 .idea
 target
 JavaProtoBuffMaven.iml

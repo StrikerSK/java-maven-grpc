@@ -11,7 +11,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <grpc.version>1.35.0</grpc.version>
+        <grpc.version>1.41.0</grpc.version>
     </properties>
 
     <dependencies>
@@ -31,45 +31,54 @@
             <version>${grpc.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.14.0</version>
+            <version>3.19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+            <version>3.19.0</version>
+        </dependency>
+
+        <dependency> <!-- necessary for Java 9+ -->
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>annotations-api</artifactId>
+            <version>6.0.53</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <defaultGoal>clean generate-sources compile install</defaultGoal>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.2</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
-                <groupId>com.github.os72</groupId>
-                <artifactId>protoc-jar-maven-plugin</artifactId>
-                <version>3.11.4</version>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:3.17.3:exe:${os.detected.classifier}</protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.41.0:exe:${os.detected.classifier}</pluginArtifact>
+                </configuration>
                 <executions>
                     <execution>
-                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
                         </goals>
-                        <configuration>
-                            <protocArtifact>com.google.protobuf:protoc:3.14.0</protocArtifact>
-                            <includeMavenTypes>direct</includeMavenTypes>
-
-                            <inputDirectories>
-                                <include>src/main/resources</include>
-                            </inputDirectories>
-
-                            <outputTargets>
-                                <outputTarget>
-                                    <type>java</type>
-                                    <outputDirectory>src/main/java</outputDirectory>
-                                </outputTarget>
-                                <outputTarget>
-                                    <type>grpc-java</type>
-                                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.0.1</pluginArtifact>
-                                    <outputDirectory>src/main/java</outputDirectory>
-                                </outputTarget>
-                            </outputTargets>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

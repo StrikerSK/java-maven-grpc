@@ -1,7 +1,8 @@
 syntax = "proto3";
 
-option java_package = "com.grpc.chat";
+option java_package = "io.grpc.examples.chat";
 option java_multiple_files = true;
+option java_outer_classname = "JavaChatService";
 
 //Important to be always same in every environment
 package chat;

@@ -35,11 +35,15 @@ public class TodoService extends TodoServiceGrpc.TodoServiceImplBase {
 
     @Override
     public void getTodo(IdRequest request, StreamObserver<PersistedTodo> responseObserver) {
-        super.getTodo(request, responseObserver);
+        PersistedTodo todo = todos.stream().filter(e -> request.getId().equals(e.getId())).findFirst().orElseThrow(() -> new RuntimeException("Item not found!"));
+        responseObserver.onNext(todo);
+        responseObserver.onCompleted();
     }
 
     @Override
     public void getTodos(Empty request, StreamObserver<PersistedTodo> responseObserver) {
-        super.getTodos(request, responseObserver);
+        // StreamObserver has method onNext which has to be called for each item stored in List
+        todos.forEach(responseObserver::onNext);
+        responseObserver.onCompleted();
     }
 }

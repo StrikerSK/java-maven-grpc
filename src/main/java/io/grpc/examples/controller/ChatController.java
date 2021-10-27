@@ -11,7 +11,6 @@ public class ChatController {
 
     private final ChatGrpcService service;
 
-
     @GetMapping("/message/{username}")
     @ResponseBody
     public String sendMessage(@PathVariable String username) {

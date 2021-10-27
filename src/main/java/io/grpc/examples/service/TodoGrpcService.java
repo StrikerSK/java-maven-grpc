@@ -4,6 +4,8 @@ import io.grpc.examples.client.TodoServiceClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class TodoGrpcService implements ITodoService {
@@ -13,6 +15,16 @@ public class TodoGrpcService implements ITodoService {
     @Override
     public String createTodo(String name, String description) {
         return client.CreateTodo(name, description);
+    }
+
+    @Override
+    public String getTodo(String id) {
+        return client.GetTodo(id).getName();
+    }
+
+    @Override
+    public List<String> getIds() {
+        return client.GetTodos();
     }
 
 }

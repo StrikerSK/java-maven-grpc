@@ -1,14 +1,20 @@
 package io.grpc.examples.client;
 
+import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.examples.server.ChatServiceServer;
 import io.grpc.examples.todo.IdRequest;
 import io.grpc.examples.todo.NewTodo;
+import io.grpc.examples.todo.PersistedTodo;
 import io.grpc.examples.todo.TodoServiceGrpc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A simple client that requests a greeting from the {@link ChatServiceServer}.
@@ -39,6 +45,30 @@ public class TodoServiceClient {
               .build();
       IdRequest responseMessage = stub.createTodo(requestMessage);
       return responseMessage.getId();
+    } catch (StatusRuntimeException e) {
+      log.warn("RPC failed: {}", e.getStatus());
+      throw new RuntimeException("Something went wrong");
+    }
+  }
+  public PersistedTodo GetTodo(String id) {
+    try {
+      return stub.getTodo(IdRequest.newBuilder().setId(id).build());
+    } catch (StatusRuntimeException e) {
+      log.warn("RPC failed: {}", e.getStatus());
+      throw new RuntimeException("Something went wrong");
+    }
+  }
+
+  public List<String> GetTodos() {
+    try {
+      List<String> ids = new ArrayList<>();
+      Iterator<PersistedTodo> response = stub.getTodos(Empty.newBuilder().build());
+
+      while (response.hasNext()) {
+        ids.add(response.next().getId());
+      }
+
+      return ids;
     } catch (StatusRuntimeException e) {
       log.warn("RPC failed: {}", e.getStatus());
       throw new RuntimeException("Something went wrong");

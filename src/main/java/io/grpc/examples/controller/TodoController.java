@@ -1,5 +1,6 @@
 package io.grpc.examples.controller;
 
+import io.grpc.examples.entity.TodoEntity;
 import io.grpc.examples.service.ITodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +22,14 @@ public class TodoController {
 
     @GetMapping("/todo/{id}")
     @ResponseBody
-    public String getTodo(@PathVariable String id) {
+    public TodoEntity getTodo(@PathVariable String id) {
         return grpcService.getTodo(id);
     }
 
     @GetMapping("/todos")
     @ResponseBody
-    public List<String> getTodos() {
-        return grpcService.getIds();
+    public List<TodoEntity> getTodos() {
+        return grpcService.getTodos();
     }
 
 }

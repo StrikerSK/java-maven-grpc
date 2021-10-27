@@ -4,6 +4,7 @@ import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.examples.entity.TodoEntity;
 import io.grpc.examples.server.ChatServiceServer;
 import io.grpc.examples.todo.IdRequest;
 import io.grpc.examples.todo.NewTodo;
@@ -50,25 +51,25 @@ public class TodoServiceClient {
       throw new RuntimeException("Something went wrong");
     }
   }
-  public PersistedTodo GetTodo(String id) {
+  public TodoEntity GetTodo(String id) {
     try {
-      return stub.getTodo(IdRequest.newBuilder().setId(id).build());
+      return new TodoEntity(stub.getTodo(IdRequest.newBuilder().setId(id).build()));
     } catch (StatusRuntimeException e) {
       log.warn("RPC failed: {}", e.getStatus());
       throw new RuntimeException("Something went wrong");
     }
   }
 
-  public List<String> GetTodos() {
+  public List<TodoEntity> GetTodos() {
     try {
-      List<String> ids = new ArrayList<>();
+      List<TodoEntity> storedTodos = new ArrayList<>();
       Iterator<PersistedTodo> response = stub.getTodos(Empty.newBuilder().build());
 
       while (response.hasNext()) {
-        ids.add(response.next().getId());
+        storedTodos.add(new TodoEntity(response.next()));
       }
 
-      return ids;
+      return storedTodos;
     } catch (StatusRuntimeException e) {
       log.warn("RPC failed: {}", e.getStatus());
       throw new RuntimeException("Something went wrong");
